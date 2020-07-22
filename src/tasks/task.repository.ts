@@ -1,14 +1,5 @@
-import { NotFoundException } from '@nestjs/common';
-import {
-  Repository,
-  EntityRepository,
-  UpdateResult,
-  DeleteResult,
-  QueryBuilder,
-  SelectQueryBuilder,
-} from 'typeorm';
+import { Repository, EntityRepository, SelectQueryBuilder } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task-dto';
-import { UpdateTaskDto } from './dto/update-task-dto';
 import { Task } from './task.entity';
 import { TaskStatus } from './task-status.enum';
 import { GetTasksFilterDto } from './dto/get-tasks-filter-dto';
