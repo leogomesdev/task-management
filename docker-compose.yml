@@ -35,6 +35,8 @@ services:
       - PGADMIN_CONFIG_CONSOLE_LOG_LEVEL=10
     volumes:
       - ./.volumes/pgadmin_lib:/var/lib/pgadmin
+    logging:
+      driver: none
     networks:
       nestkjs_tasks:
         ipv4_address: 10.12.0.4
