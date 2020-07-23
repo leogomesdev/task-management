@@ -1,16 +1,23 @@
 import { Repository, EntityRepository } from 'typeorm';
+import { ConflictException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { ConflictException } from '@nestjs/common';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
 
+    const usernameIsInUse: boolean = await this.usernameIsInUse(username);
+    if (usernameIsInUse) {
+      throw new ConflictException('Username already exists');
+    }
+
     const user = new User();
     user.username = username;
-    user.password = password;
+    user.password = await this.hashPassword(password);
+
     try {
       await user.save();
     } catch (error) {
@@ -19,5 +26,31 @@ export class UserRepository extends Repository<User> {
       }
       throw error;
     }
+  }
+
+  async validateUserPassword(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<string> {
+    const { username, password } = authCredentialsDto;
+    const user: User = await this.findOne({ username });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user.username;
+    }
+
+    return null;
+  }
+
+  private async usernameIsInUse(username: string): Promise<boolean> {
+    const { userWithSameUsername } = await this.createQueryBuilder('user')
+      .where('user.username = :username', { username })
+      .select('COUNT(1)', 'userWithSameUsername')
+      .getRawOne();
+
+    return userWithSameUsername === '1' ? true : false;
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password);
   }
 }
