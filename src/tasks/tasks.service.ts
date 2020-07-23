@@ -38,7 +38,7 @@ export class TasksService {
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
     }
-    return await this.getTaskById(id);
+    return this.getTaskById(id);
   }
 
   async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
@@ -48,7 +48,7 @@ export class TasksService {
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
     }
-    return await this.getTaskById(id);
+    return this.getTaskById(id);
   }
 
   async deleteTask(id: string): Promise<void> {
