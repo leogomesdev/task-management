@@ -9,11 +9,11 @@ export class AuthService {
     @InjectRepository(UserRepository) private userRepository: UserRepository,
   ) {}
 
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.userRepository.signUp(authCredentialsDto);
+  async registerNewUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    return this.userRepository.registerNewUser(authCredentialsDto);
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+  async login(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const username: string = await this.userRepository.validateUserPassword(
       authCredentialsDto,
     );

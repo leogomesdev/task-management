@@ -6,17 +6,17 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/signup')
+  @Post('/register')
   signUp(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
   ): Promise<void> {
-    return this.authService.signUp(authCredentialsDto);
+    return this.authService.registerNewUser(authCredentialsDto);
   }
 
-  @Post('/signin')
+  @Post('/login')
   signIn(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
   ): Promise<void> {
-    return this.authService.signIn(authCredentialsDto);
+    return this.authService.login(authCredentialsDto);
   }
 }
