@@ -1,9 +1,11 @@
+import { Task } from '../tasks/task.entity';
 import {
   BaseEntity,
   Entity,
   PrimaryGeneratedColumn,
   Column,
   Unique,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -17,4 +19,11 @@ export class User extends BaseEntity {
 
   @Column()
   password: string;
+
+  @OneToMany(
+    () => Task,
+    task => task.user,
+    { eager: true },
+  )
+  tasks: Task[];
 }
