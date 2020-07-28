@@ -73,7 +73,7 @@ export class TasksController {
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
     @GetUser() user: User,
   ): Promise<Task> {
-    return this.tasksService.updateTaskStatus(id, status, user);
+    return this.tasksService.updateTask(id, { status }, user);
   }
 
   @Delete('/:id')
