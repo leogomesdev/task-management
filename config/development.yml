@@ -1,0 +1,9 @@
+database:
+  host: '10.12.0.3'
+  databaseName: 'nestjstasks'
+  password: 'a8X0zDLr6B2q'
+  username: 'nestjstasks'
+  synchronize: true
+
+jwt:
+  secret: 'mySuperSecret!@#$%*'
