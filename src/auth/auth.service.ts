@@ -14,11 +14,11 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async registerNewUser(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+  async signup(authCredentialsDto: AuthCredentialsDto): Promise<User> {
     return this.userRepository.registerNewUser(authCredentialsDto);
   }
 
-  async login(
+  async signin(
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<{ accessToken: string }> {
     const user: User = await this.userRepository.validateUserPassword(

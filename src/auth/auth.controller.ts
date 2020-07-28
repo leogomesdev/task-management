@@ -5,6 +5,7 @@ import {
   ValidationPipe,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AuthService } from './auth.service';
@@ -15,17 +16,23 @@ import { User } from './user.entity';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/register')
+  @Post('/signup')
   signUp(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
   ): Promise<User> {
-    return this.authService.registerNewUser(authCredentialsDto);
+    return this.authService.signup(authCredentialsDto);
   }
 
-  @Post('/login')
+  @Post('/signin')
   signIn(
-    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
+    @Body(
+      new ValidationPipe({
+        exceptionFactory: () =>
+          new UnauthorizedException('Invalid credentials'),
+      }),
+    )
+    authCredentialsDto: AuthCredentialsDto,
   ): Promise<{ accessToken: string }> {
-    return this.authService.login(authCredentialsDto);
+    return this.authService.signin(authCredentialsDto);
   }
 }
