@@ -7,6 +7,7 @@ import {
   Unique,
   OneToMany,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 @Unique(['username'])
@@ -18,6 +19,7 @@ export class User extends BaseEntity {
   username: string;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   password: string;
 
   @OneToMany(

@@ -7,6 +7,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { User } from '../auth/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -27,8 +28,10 @@ export class Task extends BaseEntity {
     user => user.tasks,
     { eager: false },
   )
+  @Exclude({ toPlainOnly: true })
   user: User;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   userId: string;
 }

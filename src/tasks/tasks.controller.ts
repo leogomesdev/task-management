@@ -11,6 +11,8 @@ import {
   ValidationPipe,
   ParseUUIDPipe,
   UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { TasksService } from './tasks.service';
@@ -25,6 +27,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
+@UseInterceptors(ClassSerializerInterceptor)
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
