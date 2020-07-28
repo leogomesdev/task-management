@@ -51,6 +51,6 @@ export class UserRepository extends Repository<User> {
   }
 
   private async hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password);
+    return bcrypt.hash(password, 10);
   }
 }
