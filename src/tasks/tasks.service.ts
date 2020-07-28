@@ -4,7 +4,6 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter-dto';
 import { CreateTaskDto } from './dto/create-task-dto';
 import { UpdateTaskDto } from './dto/update-task-dto';
 import { TaskRepository } from './task.repository';
-import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
 import { UpdateResult, DeleteResult } from 'typeorm';
 import { User } from '../auth/user.entity';
