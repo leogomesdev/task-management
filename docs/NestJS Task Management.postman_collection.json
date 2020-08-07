@@ -1,0 +1,377 @@
+{
+	"info": {
+		"_postman_id": "5c6f5f24-ec8e-4b72-aaf2-cb358cdb6b9e",
+		"name": "NestJS Task Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "signup (create a new user)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "lgomess",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "passw0rD*",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/auth/signup",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signin (login as an existing user)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "lgomes",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "passw0rD*",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/auth/signin",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Get a task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks/514502f8-b4a2-4cba-9e0c-9e57c96c5795",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks",
+								"514502f8-b4a2-4cba-9e0c-9e57c96c5795"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tasks by filters",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks?search=the",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "the"
+								},
+								{
+									"key": "status",
+									"value": "DONE",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a task 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Do the laundry\",\n    \"description\": \"I need to do this ASAP\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a task 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Do the dish\",\n    \"description\": \"Use the secret recipe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a task status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"DONE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks/514502f8-b4a2-4cba-9e0c-9e57c96c5795/status",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks",
+								"514502f8-b4a2-4cba-9e0c-9e57c96c5795",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "a new title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "a new description",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "DONE",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks/75f64cb1-a748-4115-9979-65dc056ce921",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks",
+								"75f64cb1-a748-4115-9979-65dc056ce921"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks/bc5bb981-257d-46cc-9a97-7fca837b7e90",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks",
+								"bc5bb981-257d-46cc-9a97-7fca837b7e90"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

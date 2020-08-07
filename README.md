@@ -67,3 +67,15 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Usage
+
+Consult the [project documentation](https://taskmanagement7.docs.apiary.io/)
+
+### TL;DR
+
+1. Open Postman
+2. Import [this collection](docs/NestJS%20Task%20Management.postman_collection.json)
+3. Set the Postman Environments (use gear or eye buttons on top right):
+   - key: taskManagementBaseURL value: http://10.12.0.2:3000 (as default)
+   - key: taskManagementToken value: token (generate it from /auth/signin)
