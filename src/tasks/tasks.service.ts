@@ -36,7 +36,7 @@ export class TasksService {
     user: User,
   ): Promise<Task> {
     const result: UpdateResult = await this.taskRepository.update(
-      id,
+      { id, userId: user.id },
       updateTaskDto,
     );
     if (result.affected === 0) {
@@ -50,6 +50,7 @@ export class TasksService {
       id,
       userId: user.id,
     });
+
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
     }

@@ -14,7 +14,7 @@ export class UserRepository extends Repository<User> {
       throw new ConflictException('Username already exists');
     }
 
-    const user = new User();
+    const user = this.create();
     user.username = username;
     user.password = await this.hashPassword(password);
 
