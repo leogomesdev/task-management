@@ -1,16 +1,16 @@
 # Task Management
 
-This is a service to save tasks
+This is a service to manage tasks
 
 ## Description
 
 A task has the following attributes:
 
-| Field name  |        Description         |                   Rules                    |
-| :---------: | :------------------------: | :----------------------------------------: |
-|    title    |        Name of task        |                  required                  |
-| description | Explanation about the task |                  required                  |
-|   status    | Current status of the task | required,<br>in: OPEN, IN_PROGRESS or DONE |
+| Field name  |        Description         |                    Rules                    |
+| :---------: | :------------------------: | :-----------------------------------------: |
+|    title    |        Name of task        |                  required                   |
+| description | Explanation about the task |                  required                   |
+|   status    | Current status of the task | required,<br/>in: OPEN, IN_PROGRESS or DONE |
 
 ## Technologies
 
@@ -42,7 +42,7 @@ docker-compose up
 
 #### URLs:
 
-- baseURL for API: [http://10.12.0.2:3000](http://10.12.0.2:3000)
+- Base URL for API: [http://10.12.0.2:3000](http://10.12.0.2:3000)
 - PGAdmin: [http://10.12.0.4](http://10.12.0.4) - Login as **user@domain.com**, pass **123456**
 
 #### Application container
@@ -55,9 +55,7 @@ docker exec -it nestjs-tasks bash
 
 ```bash
 $ npm install
-```
 
-```bash
 # development
 $ npm run start
 
