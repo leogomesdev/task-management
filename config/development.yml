@@ -10,3 +10,4 @@ database:
 
 jwt:
   secret: 'mySuperSecret!@#$%*'
+  expiresIn: 3600000000

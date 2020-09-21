@@ -1,19 +1,21 @@
-import { Repository, EntityRepository, SelectQueryBuilder } from 'typeorm';
-import { CreateTaskDto } from './dto/create-task-dto';
-import { Task } from './task.entity';
-import { TaskStatus } from './task-status.enum';
-import { GetTasksFilterDto } from './dto/get-tasks-filter-dto';
-import { User } from '../auth/user.entity';
 import { Logger, InternalServerErrorException } from '@nestjs/common';
+import { Repository, EntityRepository, SelectQueryBuilder } from 'typeorm';
+import { serialize } from 'class-transformer';
+import { GetTasksFilterDto } from './dto/get-tasks-filter-dto';
+import { CreateTaskDto } from './dto/create-task-dto';
+import { TaskStatus } from './task-status.enum';
+import { Task } from './task.entity';
+import { User } from '../auth/user.entity';
 
 @EntityRepository(Task)
 export class TaskRepository extends Repository<Task> {
-  private logger: Logger = new Logger('TaskRepository');
+  private readonly logger = new Logger(TaskRepository.name);
+
   async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
     const {
       status,
       search,
-    }: { status: TaskStatus; search: string } = filterDto;
+    }: { status?: TaskStatus; search?: string } = filterDto;
     const query: SelectQueryBuilder<Task> = this.createQueryBuilder('task');
 
     query.where('task.userId = :userId', { userId: user.id });
@@ -35,8 +37,8 @@ export class TaskRepository extends Repository<Task> {
       this.logger.error(
         `Failed to get tasks for user "${
           user.username
-        }. Filters: ${JSON.stringify(filterDto)}`,
-        error.stack,
+        }". Filters: ${JSON.stringify(filterDto)}`,
+        error.message,
       );
       throw new InternalServerErrorException();
     }
@@ -47,7 +49,7 @@ export class TaskRepository extends Repository<Task> {
       title,
       description,
     }: { title: string; description: string } = createTaskDto;
-    const task: Task = new Task();
+    const task: Task = this.create();
     task.title = title;
     task.description = description;
     task.status = TaskStatus.OPEN;
@@ -56,12 +58,14 @@ export class TaskRepository extends Repository<Task> {
       await task.save();
     } catch (error) {
       this.logger.error(
-        `Failed to create tasks for user "${user.username}". ` +
+        `Failed when creating a task for user "${user.username}". ` +
           `Data: ${JSON.stringify(createTaskDto)}`,
-        error.stack,
+        error.message,
       );
       throw new InternalServerErrorException();
     }
+
+    this.logger.verbose(`Task created: ${serialize(task)}`);
 
     return task;
   }

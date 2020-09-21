@@ -4,7 +4,7 @@ import { TaskStatus } from '../task-status.enum';
 export class GetTasksFilterDto {
   @IsOptional()
   @IsNotEmpty()
-  search: string;
+  search?: string;
 
   @IsOptional()
   @IsEnum(TaskStatus, {
@@ -12,5 +12,5 @@ export class GetTasksFilterDto {
       `"$value" is an invalid status. ` +
       `The allowed values are: ${Object.keys(TaskStatus)}`,
   })
-  status: TaskStatus;
+  status?: TaskStatus;
 }

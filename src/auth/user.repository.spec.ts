@@ -1,21 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import * as bcrypt from 'bcryptjs';
+import MockFactory from '../test/mock.factory';
 import { UserRepository } from './user.repository';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { CreateUserDto } from './dto/create-user-dto';
 
 describe('UserRepository', () => {
   let userRepository: UserRepository;
 
-  const mockUser: User = new User();
-  mockUser.id = '3a62ae02-16e1-44de-bb25-e47371ea6100';
-  mockUser.username = 'TestUser1';
-
-  const mockAuthCredentialsDto: AuthCredentialsDto = {
-    username: 'testusername',
-    password: 'mypassworD12#',
-  };
+  const mockUser: User = MockFactory.user();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -25,31 +20,29 @@ describe('UserRepository', () => {
     userRepository = module.get<UserRepository>(UserRepository);
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe('registerNewUser', () => {
+    const createUserDto: CreateUserDto = MockFactory.createUserDto();
+
     let save: jest.MockedFunction<any>;
     let mockedResultsForGetRawOne: jest.MockedFunction<any>;
+
+    const createQueryBuilderMock: any = {
+      select: () => createQueryBuilderMock,
+      where: () => createQueryBuilderMock,
+      getRawOne: () => mockedResultsForGetRawOne,
+    };
 
     beforeEach(() => {
       save = jest.fn();
 
       userRepository.create = jest.fn().mockReturnValue({ save });
 
-      const createQueryBuilderMock: any = {
-        select: () => createQueryBuilderMock,
-        where: () => createQueryBuilderMock,
-        getRawOne: () => mockedResultsForGetRawOne,
-      };
-
       jest
         .spyOn(userRepository, 'createQueryBuilder')
         .mockImplementation(() => createQueryBuilderMock);
     });
 
-    describe("case username isn't in use", () => {
+    describe("when username isn't in use", () => {
       it('successfully registers a new user', async () => {
         mockedResultsForGetRawOne = {
           userWithSameUsername: '0',
@@ -58,7 +51,7 @@ describe('UserRepository', () => {
         save.mockResolvedValue(mockUser);
 
         await expect(
-          userRepository.registerNewUser(mockAuthCredentialsDto),
+          userRepository.registerNewUser(createUserDto),
         ).resolves.not.toThrow();
       });
 
@@ -71,21 +64,21 @@ describe('UserRepository', () => {
 
         save.mockResolvedValue(mockUser);
 
-        await userRepository.registerNewUser(mockAuthCredentialsDto);
+        await userRepository.registerNewUser(createUserDto);
 
         expect(bcrypt.hash).toHaveBeenCalledTimes(1);
-        expect(bcrypt.hash).toHaveBeenCalledWith('mypassworD12#', 10);
+        expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
       });
     });
 
-    describe('case username is already in use', () => {
+    describe('when username is already in use', () => {
       it('throws a ConflictException ', async () => {
         mockedResultsForGetRawOne = {
           userWithSameUsername: '1',
         };
 
         await expect(
-          userRepository.registerNewUser(mockAuthCredentialsDto),
+          userRepository.registerNewUser(createUserDto),
         ).rejects.toThrow(new ConflictException('Username already exists'));
       });
 
@@ -97,14 +90,14 @@ describe('UserRepository', () => {
         bcrypt.hash = jest.fn().mockResolvedValue('testHash');
 
         await expect(
-          userRepository.registerNewUser(mockAuthCredentialsDto),
+          userRepository.registerNewUser(createUserDto),
         ).rejects.toThrow();
 
         expect(bcrypt.hash).not.toHaveBeenCalled();
       });
     });
 
-    it('case save() throws an error with code 23505, throws a ConflictException', async () => {
+    it('when save() throws an error with code 23505, throws a ConflictException', async () => {
       mockedResultsForGetRawOne = {
         userWithSameUsername: '0',
       };
@@ -112,11 +105,11 @@ describe('UserRepository', () => {
       save.mockRejectedValue({ code: '23505' });
 
       await expect(
-        userRepository.registerNewUser(mockAuthCredentialsDto),
+        userRepository.registerNewUser(createUserDto),
       ).rejects.toThrow(new ConflictException('Username already exists'));
     });
 
-    it('case save() throws an unknown error, throws this error', async () => {
+    it('when save() throws an unknown error, throws this error', async () => {
       mockedResultsForGetRawOne = {
         userWithSameUsername: '0',
       };
@@ -124,30 +117,25 @@ describe('UserRepository', () => {
       save.mockRejectedValue(new Error('Unhandled error'));
 
       await expect(
-        userRepository.registerNewUser(mockAuthCredentialsDto),
+        userRepository.registerNewUser(createUserDto),
       ).rejects.toThrow(new Error('Unhandled error'));
     });
   });
 
   describe('validateUserPassword', () => {
-    let user: User;
+    const mockAuthCredentialsDto: AuthCredentialsDto = MockFactory.authCredentialsDto();
 
-    beforeEach(() => {
-      user = new User();
-      user.username = 'TestUsername';
-    });
-
-    it('case validation is successfully, returns the User', async () => {
-      userRepository.findOne = jest.fn().mockResolvedValue(user);
+    it('when validation is successfully, returns the User', async () => {
+      userRepository.findOne = jest.fn().mockResolvedValue(mockUser);
       bcrypt.compare = jest.fn().mockResolvedValue(true);
 
       const result: User = await userRepository.validateUserPassword(
         mockAuthCredentialsDto,
       );
-      expect(result).toEqual(user);
+      expect(result).toEqual(mockUser);
     });
 
-    it('case user cannot be found, returns null', async () => {
+    it('when user cannot be found, returns null', async () => {
       userRepository.findOne = jest.fn().mockResolvedValue(null);
       bcrypt.compare = jest.fn().mockResolvedValue(false);
 
@@ -158,8 +146,8 @@ describe('UserRepository', () => {
       expect(bcrypt.compare).not.toHaveBeenCalled();
     });
 
-    it('case password is incorrect, returns null', async () => {
-      userRepository.findOne = jest.fn().mockResolvedValue(user);
+    it('when password is incorrect, returns null', async () => {
+      userRepository.findOne = jest.fn().mockResolvedValue(mockUser);
       bcrypt.compare = jest.fn().mockResolvedValue(false);
 
       const result: User = await userRepository.validateUserPassword(

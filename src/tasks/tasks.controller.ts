@@ -13,6 +13,7 @@ import {
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Logger,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { TasksService } from './tasks.service';
@@ -23,14 +24,13 @@ import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
 import { User } from '../auth/user.entity';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { Logger } from '@nestjs/common';
+import { GetUser } from '../auth/decorator/get-user.decorator';
 
 @Controller('tasks')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @UseInterceptors(ClassSerializerInterceptor)
 export class TasksController {
-  private logger: Logger = new Logger('TasksController');
+  private readonly logger = new Logger(TasksController.name);
   constructor(private tasksService: TasksService) {}
 
   @Get()
@@ -62,7 +62,7 @@ export class TasksController {
     @GetUser() user: User,
   ): Promise<Task> {
     this.logger.verbose(
-      `User ${user.username} creating a new task. Data: ${JSON.stringify(
+      `User ${user.username} is creating a new task. Data: ${JSON.stringify(
         createTaskDto,
       )}`,
     );

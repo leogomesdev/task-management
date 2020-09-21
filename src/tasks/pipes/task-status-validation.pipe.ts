@@ -5,7 +5,9 @@ export class TaskStatusValidationPipe implements PipeTransform {
   readonly allowedStatuses = Object.keys(TaskStatus);
 
   transform(value: any) {
-    value = value.toUpperCase();
+    if (value) {
+      value = value.toUpperCase();
+    }
 
     if (!this.isStatusValid(value)) {
       throw new BadRequestException(

@@ -3,11 +3,12 @@ import { ConflictException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { CreateUserDto } from './dto/create-user-dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async registerNewUser(authCredentialsDto: AuthCredentialsDto): Promise<User> {
-    const { username, password } = authCredentialsDto;
+  async registerNewUser(createUserDto: CreateUserDto): Promise<User> {
+    const { username, password } = createUserDto;
 
     const usernameIsInUse: boolean = await this.usernameIsInUse(username);
     if (usernameIsInUse) {
@@ -16,7 +17,7 @@ export class UserRepository extends Repository<User> {
 
     const user = this.create();
     user.username = username;
-    user.password = await this.hashPassword(password);
+    user.password = await UserRepository.hashPassword(password);
 
     try {
       await user.save();
@@ -31,7 +32,7 @@ export class UserRepository extends Repository<User> {
 
   async validateUserPassword(
     authCredentialsDto: AuthCredentialsDto,
-  ): Promise<User> {
+  ): Promise<User | null> {
     const { username, password } = authCredentialsDto;
     const user: User = await this.findOne({ username });
 
@@ -48,10 +49,10 @@ export class UserRepository extends Repository<User> {
       .select('COUNT(1)', 'userWithSameUsername')
       .getRawOne();
 
-    return userWithSameUsername === '1' ? true : false;
+    return userWithSameUsername === '1';
   }
 
-  private async hashPassword(password: string): Promise<string> {
+  static async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, 10);
   }
 }

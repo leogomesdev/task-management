@@ -9,6 +9,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task-dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter-dto';
 import { UpdateTaskDto } from './dto/update-task-dto';
+import MockFactory from '../test/mock.factory';
 
 describe('TasksService', () => {
   let tasksService: TasksService;
@@ -22,9 +23,7 @@ describe('TasksService', () => {
     update: jest.fn(),
   });
 
-  const mockUser: User = new User();
-  mockUser.id = '3a62ae02-16e1-44de-bb25-e47371ea6100';
-  mockUser.username = 'TestUser1';
+  const mockUser: User = MockFactory.user();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -39,8 +38,11 @@ describe('TasksService', () => {
   });
 
   describe('getTasks', () => {
+    const expectedResults: Task[] = [];
+    expectedResults.push(MockFactory.task());
+    expectedResults.push(MockFactory.task());
+
     it('calls taskRepository.getTasks()', async () => {
-      const expectedResults: Task[] = [new Task(), new Task()];
       taskRepository.getTasks = jest.fn().mockResolvedValue(expectedResults);
 
       expect(taskRepository.getTasks).not.toHaveBeenCalled();
@@ -56,7 +58,6 @@ describe('TasksService', () => {
     });
 
     it('returns all tasks from repository', async () => {
-      const expectedResults: Task[] = [new Task(), new Task()];
       taskRepository.getTasks = jest.fn().mockResolvedValue(expectedResults);
 
       expect(taskRepository.getTasks).not.toHaveBeenCalled();
@@ -73,9 +74,9 @@ describe('TasksService', () => {
   });
 
   describe('getTaskById', () => {
+    const mockTask: Task = MockFactory.task();
+
     it('calls taskRepository.findOneOrFail()', async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
       taskRepository.findOneOrFail = jest.fn().mockResolvedValue(mockTask);
 
       await tasksService.getTaskById(mockTask.id, mockUser);
@@ -86,9 +87,7 @@ describe('TasksService', () => {
       });
     });
 
-    it('case the task is found, returns it', async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
+    it('when the task is found, returns it', async () => {
       taskRepository.findOneOrFail = jest.fn().mockResolvedValue(mockTask);
 
       const result: Task = await tasksService.getTaskById(
@@ -98,7 +97,7 @@ describe('TasksService', () => {
       expect(result).toEqual(mockTask);
     });
 
-    it("case the task isn't found, throws an error", async () => {
+    it("when the task isn't found, throws an error", async () => {
       taskRepository.findOneOrFail = jest.fn().mockImplementation(() => {
         throw new Error('Not found');
       });
@@ -110,15 +109,10 @@ describe('TasksService', () => {
   });
 
   describe('createTask', () => {
+    const mockTask: Task = MockFactory.task();
+    const mockCreateTaskDto: CreateTaskDto = MockFactory.createTaskDto();
+
     it('calls taskRepository.createTask()', async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
-
-      const mockCreateTaskDto: CreateTaskDto = {
-        title: 'Do the laundry',
-        description: 'ASAP',
-      };
-
       taskRepository.createTask = jest.fn().mockResolvedValue(mockTask);
 
       await tasksService.createTask(mockCreateTaskDto, mockUser);
@@ -130,14 +124,6 @@ describe('TasksService', () => {
     });
 
     it('returns the created task', async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
-
-      const mockCreateTaskDto: CreateTaskDto = {
-        title: 'Do the laundry',
-        description: 'ASAP',
-      };
-
       taskRepository.createTask = jest.fn().mockResolvedValue(mockTask);
 
       const result: Task = await tasksService.createTask(
@@ -149,29 +135,19 @@ describe('TasksService', () => {
   });
 
   describe('deleteTask', () => {
-    it('case task is deleted, resolves the promise', async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
+    const mockTask: Task = MockFactory.task();
+    const deleteResultMock: DeleteResult = {
+      affected: 1,
+      raw: {},
+    };
 
-      const deleteResultMock: DeleteResult = {
-        affected: 1,
-        raw: {},
-      };
-
+    it('when task is deleted, resolves the promise', async () => {
       taskRepository.delete = jest.fn().mockResolvedValue(deleteResultMock);
 
-      expect(tasksService.deleteTask(mockTask.id, mockUser)).resolves;
+      await expect(tasksService.deleteTask(mockTask.id, mockUser)).resolves;
     });
 
     it('calls taskRepository.delete() to delete a task', async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
-
-      const deleteResultMock: DeleteResult = {
-        affected: 1,
-        raw: {},
-      };
-
       taskRepository.delete = jest.fn().mockResolvedValue(deleteResultMock);
 
       await tasksService.deleteTask(mockTask.id, mockUser);
@@ -182,14 +158,8 @@ describe('TasksService', () => {
       });
     });
 
-    it("case task isn't found, throws an error", async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
-
-      const deleteResultMock: DeleteResult = {
-        affected: 0,
-        raw: {},
-      };
+    it("when task isn't found, throws an error", async () => {
+      deleteResultMock.affected = 0;
 
       taskRepository.delete = jest.fn().mockResolvedValue(deleteResultMock);
 
@@ -200,21 +170,18 @@ describe('TasksService', () => {
   });
 
   describe('updateTask', () => {
+    const mockTask: Task = MockFactory.task();
+    const updateResultMock: UpdateResult = {
+      affected: 1,
+      raw: {},
+      generatedMaps: [],
+    };
+    const updateTaskDto: UpdateTaskDto = {
+      status: TaskStatus.IN_PROGRESS,
+    };
+
     it('calls taskRepository.update() to update a task', async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
-      mockTask.status = TaskStatus.OPEN;
-
-      const updateResultMock: UpdateResult = {
-        affected: 1,
-        raw: {},
-        generatedMaps: [],
-      };
       taskRepository.update = jest.fn().mockResolvedValue(updateResultMock);
-
-      const updateTaskDto: UpdateTaskDto = {
-        status: TaskStatus.IN_PROGRESS,
-      };
 
       await tasksService.updateTask(mockTask.id, updateTaskDto, mockUser);
 
@@ -225,24 +192,11 @@ describe('TasksService', () => {
     });
 
     it('returns the updated task', async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
-      mockTask.status = TaskStatus.OPEN;
-
-      const updateResultMock: UpdateResult = {
-        affected: 1,
-        raw: {},
-        generatedMaps: [],
-      };
       taskRepository.update = jest.fn().mockResolvedValue(updateResultMock);
 
       tasksService.getTaskById = jest.fn().mockResolvedValue({
         status: TaskStatus.IN_PROGRESS,
       });
-
-      const updateTaskDto: UpdateTaskDto = {
-        status: TaskStatus.IN_PROGRESS,
-      };
 
       const result = await tasksService.updateTask(
         mockTask.id,
@@ -252,22 +206,12 @@ describe('TasksService', () => {
       expect(result.status).toEqual(TaskStatus.IN_PROGRESS);
     });
 
-    it("case task isn't found, throws an error", async () => {
-      const mockTask: Task = new Task();
-      mockTask.id = '75f64cb1-a748-4115-9979-65dc056ce921';
+    it("when task isn't found, throws an error", async () => {
+      updateResultMock.affected = 0;
 
-      const updateResultMock: UpdateResult = {
-        affected: 0,
-        raw: {},
-        generatedMaps: [],
-      };
       taskRepository.update = jest.fn().mockResolvedValue(updateResultMock);
 
-      const updateTaskDto: UpdateTaskDto = {
-        status: TaskStatus.IN_PROGRESS,
-      };
-
-      expect(
+      await expect(
         tasksService.updateTask(mockTask.id, updateTaskDto, mockUser),
       ).rejects.toThrow(
         new NotFoundException(`Task with ID "${mockTask.id}" not found`),

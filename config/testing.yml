@@ -1,0 +1,7 @@
+server:
+  origin: '*'
+
+database: false
+
+jwt:
+  secret: 'myTestingSecret!@#$%*'

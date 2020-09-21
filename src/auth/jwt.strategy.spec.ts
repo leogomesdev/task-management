@@ -1,9 +1,10 @@
+import { UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtStrategy } from './jwt.strategy';
 import { UserRepository } from './user.repository';
 import { User } from './user.entity';
-import { JwtPayload } from '../../dist/auth/jwt-payload.interface';
-import { UnauthorizedException } from '@nestjs/common';
+import { JwtPayload } from './jwt-payload.interface';
+import MockFactory from '../test/mock.factory';
 
 describe('JwtStrategy', () => {
   let jwtStrategy: JwtStrategy;
@@ -24,27 +25,15 @@ describe('JwtStrategy', () => {
     jwtStrategy = module.get<JwtStrategy>(JwtStrategy);
     userRepository = module.get<UserRepository>(UserRepository);
   });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe('registerNewUser', () => {
-    let user: User;
-    let jwtPayload: JwtPayload;
+    const user: User = MockFactory.user();
 
-    beforeEach(() => {
-      user = new User();
-      user.id = '75f64cb1-a748-4115-9979-65dc056ce921';
-      user.username = 'TestUser';
+    const jwtPayload: JwtPayload = {
+      id: user.id,
+      username: user.username,
+    };
 
-      jwtPayload = {
-        id: user.id,
-        username: user.username,
-      };
-    });
-
-    describe('case user exists, based on JWT payload', () => {
+    describe('when user exists, based on JWT payload', () => {
       beforeEach(() => {
         userRepository.findOne = jest.fn().mockResolvedValue(user);
       });
@@ -64,7 +53,7 @@ describe('JwtStrategy', () => {
       });
     });
 
-    it('case user cannot be found, throws an unauthorized exception', async () => {
+    it('when user cannot be found, throws an unauthorized exception', async () => {
       userRepository.findOne = jest.fn().mockResolvedValue(null);
 
       await expect(jwtStrategy.validate(jwtPayload)).rejects.toThrow(
