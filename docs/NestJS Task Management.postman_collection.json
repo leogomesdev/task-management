@@ -9,25 +9,17 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "signup (create a new user)",
+					"name": "Create a new user",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "lgomess",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "passw0rD*",
-									"type": "text"
-								}
-							],
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"leogomesdev\",\n    \"password\": \"Leo123456\"\n}",
 							"options": {
+								"raw": {
+									"language": "json"
+								},
 								"urlencoded": {}
 							}
 						},
@@ -45,25 +37,17 @@
 					"response": []
 				},
 				{
-					"name": "signin (login as an existing user)",
+					"name": "Generate an access token",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "lgomes",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "passw0rD*",
-									"type": "text"
-								}
-							],
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"leogomesdev\",\n    \"password\": \"Leo123456\"\n}",
 							"options": {
+								"raw": {
+									"language": "json"
+								},
 								"urlencoded": {}
 							}
 						},
@@ -87,7 +71,79 @@
 			"name": "Tasks",
 			"item": [
 				{
-					"name": "Get a task",
+					"name": "Create task 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Do the laundry\",\n    \"description\": \"I need to do this ASAP\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create task 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{taskManagementToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Do the dinner\",\n    \"description\": \"Use the secret recipe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{taskManagementBaseURL}}/tasks",
+							"host": [
+								"{{taskManagementBaseURL}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a task by id",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -102,20 +158,20 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks/514502f8-b4a2-4cba-9e0c-9e57c96c5795",
+							"raw": "{{taskManagementBaseURL}}/tasks/ef297a9b-cb11-404c-ab37-5dbc9fe84f79",
 							"host": [
 								"{{taskManagementBaseURL}}"
 							],
 							"path": [
 								"tasks",
-								"514502f8-b4a2-4cba-9e0c-9e57c96c5795"
+								"ef297a9b-cb11-404c-ab37-5dbc9fe84f79"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get all tasks by filters",
+					"name": "Get tasks by filters",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -180,78 +236,6 @@
 					"response": []
 				},
 				{
-					"name": "Create a task 1",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{taskManagementToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Do the laundry\",\n    \"description\": \"I need to do this ASAP\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks",
-							"host": [
-								"{{taskManagementBaseURL}}"
-							],
-							"path": [
-								"tasks"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create a task 2",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{taskManagementToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Do the dish\",\n    \"description\": \"Use the secret recipe\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks",
-							"host": [
-								"{{taskManagementBaseURL}}"
-							],
-							"path": [
-								"tasks"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Update a task status",
 					"request": {
 						"auth": {
@@ -276,13 +260,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks/514502f8-b4a2-4cba-9e0c-9e57c96c5795/status",
+							"raw": "{{taskManagementBaseURL}}/tasks/ef297a9b-cb11-404c-ab37-5dbc9fe84f79/status",
 							"host": [
 								"{{taskManagementBaseURL}}"
 							],
 							"path": [
 								"tasks",
-								"514502f8-b4a2-4cba-9e0c-9e57c96c5795",
+								"ef297a9b-cb11-404c-ab37-5dbc9fe84f79",
 								"status"
 							]
 						}
@@ -305,37 +289,23 @@
 						"method": "PATCH",
 						"header": [],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "title",
-									"value": "a new title",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "a new description",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "status",
-									"value": "DONE",
-									"type": "text"
-								}
-							],
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"a new title\",\n    \"description\": \"a new description\",\n    \"status\": \"DONE\"\n}",
 							"options": {
+								"raw": {
+									"language": "json"
+								},
 								"urlencoded": {}
 							}
 						},
 						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks/75f64cb1-a748-4115-9979-65dc056ce921",
+							"raw": "{{taskManagementBaseURL}}/tasks/ef297a9b-cb11-404c-ab37-5dbc9fe84f79",
 							"host": [
 								"{{taskManagementBaseURL}}"
 							],
 							"path": [
 								"tasks",
-								"75f64cb1-a748-4115-9979-65dc056ce921"
+								"ef297a9b-cb11-404c-ab37-5dbc9fe84f79"
 							]
 						}
 					},
@@ -357,13 +327,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks/bc5bb981-257d-46cc-9a97-7fca837b7e90",
+							"raw": "{{taskManagementBaseURL}}/tasks/ef297a9b-cb11-404c-ab37-5dbc9fe84f79",
 							"host": [
 								"{{taskManagementBaseURL}}"
 							],
 							"path": [
 								"tasks",
-								"bc5bb981-257d-46cc-9a97-7fca837b7e90"
+								"ef297a9b-cb11-404c-ab37-5dbc9fe84f79"
 							]
 						}
 					},

@@ -3,7 +3,7 @@ services:
   node:
     image: node:14
     container_name: nestjs-tasks
-    command: bash -c "npm install && npm run start:dev"
+    command: bash -c "npm install && npm run start"
     restart: always
     working_dir: '/app'
     volumes:
