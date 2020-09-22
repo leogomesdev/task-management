@@ -1,0 +1,715 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "Task Management",
+    "description" : "A system to manage tasks, with authentication and authorization. The user can only manage his own tasks. How to use? Check below\n<br/>\n1º Create a new user\n<br/>\n2º Create a new token by using user credentials\n<br/>\n3º Create a new task\n<br/>\n4º Find, Update or Delete your tasks\n",
+    "termsOfService" : "http://swagger.io/terms/",
+    "contact" : {
+      "email" : "leogomesdev@gmail.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/leogomesdev/Task_Management/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "task",
+    "description" : "Everything about your Tasks"
+  }, {
+    "name" : "auth",
+    "description" : "Operations about user authentication"
+  } ],
+  "paths" : {
+    "/auth/signup" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Create user",
+        "description" : "Create a new user",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/CreateUser"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "User created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                },
+                "examples" : {
+                  "User created" : {
+                    "$ref" : "#/components/examples/User1"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Invalid password" : {
+                    "$ref" : "#/components/examples/ErrorInvalidPassword"
+                  },
+                  "Invalid username" : {
+                    "$ref" : "#/components/examples/ErrorInvalidUsername"
+                  }
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Username already exists" : {
+                    "$ref" : "#/components/examples/ErrorUsernameAlreadyExists"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signin" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Use credentials of an existing user to generate an access token",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/AuthCredentials"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Token created",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Token created" : {
+                    "$ref" : "#/components/examples/Token1"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Invalid username or password" : {
+                    "$ref" : "#/components/examples/ErrorInvalidCredentials"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks" : {
+      "get" : {
+        "tags" : [ "task" ],
+        "summary" : "Get tasks",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "Any string to partial matches with task title or description",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Any valid status to filter",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/TaskStatusEnum"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A list of Tasks, that can be filtered or not",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Task"
+                  }
+                },
+                "examples" : {
+                  "A list of all tasks" : {
+                    "value" : [ {
+                      "$ref" : "#/components/examples/TaskOpen1"
+                    }, {
+                      "$ref" : "#/components/examples/TaskInProgress1"
+                    } ]
+                  },
+                  "A list of tasks with status OPEN" : {
+                    "value" : [ {
+                      "$ref" : "#/components/examples/TaskOpen1"
+                    }, {
+                      "$ref" : "#/components/examples/TaskOpen2"
+                    } ]
+                  },
+                  "Empty array" : {
+                    "value" : [ ]
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request: validation exception",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "A typo when filtering by status" : {
+                    "$ref" : "#/components/examples/ErrorInvalidStatus"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "task" ],
+        "summary" : "Add a new task",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/CreateTask"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Task created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request: validation exception",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "A typo in status field" : {
+                    "$ref" : "#/components/examples/ErrorInvalidStatus"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/tasks/{taskId}" : {
+      "get" : {
+        "tags" : [ "task" ],
+        "summary" : "Find task by ID",
+        "description" : "Returns a single task",
+        "parameters" : [ {
+          "name" : "taskId",
+          "in" : "path",
+          "description" : "ID of task to find",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Task found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid"
+          },
+          "404" : {
+            "description" : "Task not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Not Found" : {
+                    "$ref" : "#/components/examples/ErrorTaskNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "task" ],
+        "summary" : "Delete a task",
+        "parameters" : [ {
+          "name" : "taskId",
+          "in" : "path",
+          "description" : "Task id to delete",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid"
+          },
+          "404" : {
+            "description" : "Task not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Not Found" : {
+                    "$ref" : "#/components/examples/ErrorTaskNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "task" ],
+        "summary" : "Update some fields of a task",
+        "parameters" : [ {
+          "name" : "taskId",
+          "in" : "path",
+          "description" : "ID of task that needs to be updated",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdateTask"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Task updated successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request: validation exception",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "A typo in status field" : {
+                    "$ref" : "#/components/examples/ErrorInvalidStatus"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid"
+          },
+          "404" : {
+            "description" : "Task not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Not Found" : {
+                    "$ref" : "#/components/examples/ErrorTaskNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/tasks/{taskId}/status" : {
+      "patch" : {
+        "tags" : [ "task" ],
+        "summary" : "Update a task status",
+        "description" : "Allows to update only the status of the task",
+        "parameters" : [ {
+          "name" : "taskId",
+          "in" : "path",
+          "description" : "ID of task to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdateTaskStatus"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Task status sucessfully updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request: validation exception",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "A typo in status field" : {
+                    "$ref" : "#/components/examples/ErrorInvalidStatus"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid"
+          },
+          "404" : {
+            "description" : "Task not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Not Found" : {
+                    "$ref" : "#/components/examples/ErrorTaskNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid",
+            "readOnly" : true
+          },
+          "username" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Task" : {
+        "required" : [ "description", "title" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "title" : {
+            "type" : "string",
+            "example" : "Do the laundry"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "Before the winter"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/TaskStatusEnum"
+          }
+        }
+      },
+      "TaskStatusEnum" : {
+        "type" : "string",
+        "default" : "OPEN",
+        "enum" : [ "OPEN", "IN_PROGRESS", "DONE" ]
+      }
+    },
+    "responses" : {
+      "UnauthorizedError" : {
+        "description" : "Access token is missing or invalid"
+      }
+    },
+    "parameters" : {
+      "TaskSearch" : {
+        "name" : "search",
+        "in" : "query",
+        "description" : "Any string to partial matches with task title or description",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "TaskStatus" : {
+        "name" : "status",
+        "in" : "query",
+        "description" : "Any valid status to filter",
+        "required" : false,
+        "style" : "form",
+        "explode" : true,
+        "schema" : {
+          "$ref" : "#/components/schemas/TaskStatusEnum"
+        }
+      }
+    },
+    "examples" : {
+      "TaskOpen1" : {
+        "value" : {
+          "id" : "f6ca0dbe-2b6e-4a36-9a71-8885825e51ca",
+          "title" : "Do the laundry",
+          "description" : "I need to do this ASAP",
+          "status" : "OPEN"
+        }
+      },
+      "TaskOpen2" : {
+        "value" : {
+          "id" : "f6ca0dbe-2b6e-4a36-9a71-8885825e51xp",
+          "title" : "Call the doctor",
+          "description" : "I need to schedule an appointment",
+          "status" : "OPEN"
+        }
+      },
+      "TaskInProgress1" : {
+        "value" : {
+          "id" : "f6xd0dbe-2b6e-4a36-9a71-8885825e51ca",
+          "title" : "Do the dish",
+          "description" : "Or call someone to do this",
+          "status" : "IN_PROGRESS"
+        }
+      },
+      "User1" : {
+        "value" : {
+          "id" : "f6xd0dbe-2b6e-4a36-9a71-8885825e51xx",
+          "username" : "leogomesdev"
+        }
+      },
+      "Token1" : {
+        "value" : {
+          "accessToken" : {
+            "type" : "string",
+            "example" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk4NTc1ZDZmLTc5NjQtNGNjNy1hNTkxLTI1MjBiZjRjNWI3MyIsInVzZXJuYW1lIjoibGdvbWVzIiwiaWF0IjoxNjAwNzI2Nzk3LCJleHAiOjUyMDA3MjY3OTd9.rfPhoIwxcF6PolX2cUrxxd8EDzkTbDDbUM9ry9JwkPg"
+          }
+        }
+      },
+      "ErrorInvalidStatus" : {
+        "value" : {
+          "statusCode" : "400",
+          "message" : [ "\\\"DONEa\\\" is an invalid status. The allowed values are: OPEN,IN_PROGRESS,DONE" ],
+          "error" : "Bad Request"
+        }
+      },
+      "ErrorTaskNotFound" : {
+        "value" : {
+          "statusCode" : "404",
+          "message" : "Task with ID \\\"75f64cb1-a748-4115-9979-65dc056ce922\\\" not found",
+          "error" : "Not Found"
+        }
+      },
+      "ErrorUsernameAlreadyExists" : {
+        "value" : {
+          "statusCode" : "409",
+          "message" : "Username already exists",
+          "error" : "Conflict"
+        }
+      },
+      "ErrorInvalidPassword" : {
+        "value" : {
+          "statusCode" : "400",
+          "message" : [ "password must contains: 1 upper case letter; 1 lower case letter; 1 number or special character", "password must be longer than or equal to 8 characters" ],
+          "error" : "Bad Request"
+        }
+      },
+      "ErrorInvalidUsername" : {
+        "value" : {
+          "statusCode" : "400",
+          "message" : [ "username must be longer than or equal to 4 characters" ],
+          "error" : "Bad Request"
+        }
+      },
+      "ErrorInvalidCredentials" : {
+        "value" : {
+          "statusCode" : "401",
+          "message" : "Invalid credentials",
+          "error" : "Unauthorized"
+        }
+      }
+    },
+    "requestBodies" : {
+      "AuthCredentials" : {
+        "description" : "User Credentials object",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "required" : [ "password", "username" ],
+              "type" : "object",
+              "properties" : {
+                "username" : {
+                  "type" : "string",
+                  "example" : "leogomesdev"
+                },
+                "password" : {
+                  "type" : "string",
+                  "example" : "myPassword2020*"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateUser" : {
+        "description" : "User Properties object",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "required" : [ "password", "username" ],
+              "type" : "object",
+              "properties" : {
+                "username" : {
+                  "type" : "string",
+                  "example" : "leogomesdev"
+                },
+                "password" : {
+                  "type" : "string",
+                  "example" : "myPassword2020*"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateTask" : {
+        "description" : "Properties to create a new task",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "required" : [ "description", "title" ],
+              "type" : "object",
+              "properties" : {
+                "title" : {
+                  "type" : "string",
+                  "example" : "Do the laundry"
+                },
+                "description" : {
+                  "type" : "string",
+                  "example" : "I need to do it as soon as possible*"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateTask" : {
+        "description" : "Properties to update any field of a task",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "title" : {
+                  "type" : "string",
+                  "example" : "Do the laundry"
+                },
+                "description" : {
+                  "type" : "string",
+                  "example" : "I need to do it as soon as possible*"
+                },
+                "status" : {
+                  "$ref" : "#/components/schemas/TaskStatusEnum"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateTaskStatus" : {
+        "description" : "Properties to update a task status",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "required" : [ "status" ],
+              "type" : "object",
+              "properties" : {
+                "status" : {
+                  "$ref" : "#/components/schemas/TaskStatusEnum"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}
