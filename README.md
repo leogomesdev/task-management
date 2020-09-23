@@ -1,3 +1,15 @@
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
+
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
+
+<p align="center">Build with <a href="http://nodejs.org" target="_blank">Node.js</a> framework</p>
+<p align="center">
+<a href="#" target="_blank"><img src="https://img.shields.io/badge/coverage-100%25-green" alt="Coverage" /></a>
+</p>
+
 # Task Management
 
 This is a service to manage tasks.
@@ -15,7 +27,7 @@ A Task has the following attributes:
 | description | Explanation about the task |                string                 |         |
 |   status    | Current status of the task | string, enum: OPEN, IN_PROGRESS, DONE | OPEN    |
 
-## Technologies
+## Main technologies used
 
 - [NestJS](http://nestjs.com) a Typescript framework for Node.js
 - [Postgres](https://www.postgresql.org) as database
@@ -46,14 +58,12 @@ A Task has the following attributes:
 ### With Docker
 
 - Be sure you have [Docker](https://docs.docker.com/get-docker) and [docker-compose](https://docs.docker.com/compose) installed.
-
+- Run:
 ```bash
 docker-compose up
 ```
-#### URLs:
 
-- Base URL for API: [http://10.12.0.2:3000](http://10.12.0.2:3000)
-- PGAdmin: [http://10.12.0.4](http://10.12.0.4) - Login as **user@domain.com**, password **123456**
+- Use this base URL for API connection: [http://10.12.0.2:3000](http://10.12.0.2:3000)
 
 #### Application container
 
