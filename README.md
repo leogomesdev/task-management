@@ -17,6 +17,8 @@ This is a service to manage tasks.
 It's necessary to create a user to use the system.
 A user can only manage his own tasks.
 
+This project is a back-end application using REST API to allow user register, user authentication, and task management.
+
 ## Description
 
 A Task has the following attributes:
