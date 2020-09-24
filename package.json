@@ -1,8 +1,13 @@
 {
   "name": "nestjs-task-management",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "1.0.0",
+  "description": "A Task Management System",
+  "author": "Leonardo Gomes da Silva",
+  "engines": {
+    "node": "^14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "engineStrict": true,
   "private": true,
   "license": "UNLICENSED",
   "husky": {
