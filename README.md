@@ -59,6 +59,7 @@ A Task has the following attributes:
 
 - Be sure you have [Docker](https://docs.docker.com/get-docker) and [docker-compose](https://docs.docker.com/compose) installed.
 - Run:
+
 ```bash
 docker-compose up
 ```
@@ -73,7 +74,11 @@ docker exec -it nestjs-tasks bash
 
 ### Without Docker
 
-- Configure database connection at config/development.yml OR define the envs listed at src/config/typeorm.config.ts.
+```bash
+$ cp -v .env.example .env
+```
+
+- Edit .env file to provide database connection configs
 
 ```bash
 $ npm install
@@ -114,6 +119,5 @@ Consult the API documentation [available at swagger](https://app.swaggerhub.com/
 
 - Test files are located near the classes they test. This is recommended at [Official Documentation](https://docs.nestjs.com/fundamentals/testing).
 - The modules of this project are represented in the image below:
-
 
 ![Diagram with the modules structure in this project](docs/project-structure.png)

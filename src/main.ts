@@ -1,22 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger, INestApplication } from '@nestjs/common';
 import { HttpExceptionFilter } from './http-exception.filter';
-import * as config from 'config';
 import { AppModule } from './app.module';
+import appConfig from './config/app.config';
 
 async function bootstrap() {
   const logger: Logger = new Logger('bootstrap');
-  const serverConfig = config.get('server');
 
   const app: INestApplication = await NestFactory.create(AppModule);
+  const origin: string = appConfig.origin;
 
-  app.enableCors({ origin: serverConfig.origin });
-  logger.log(`Accepting requests from origin ${serverConfig.origin}`);
+  app.enableCors({ origin });
+  logger.log(`Accepting requests from origin ${origin}`);
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  const port = process.env.PORT || serverConfig.port;
-  await app.listen(port);
-  logger.log(`Application is running on port ${port}`);
+  await app.listen(appConfig.port);
+  logger.log(`Application is running on port ${appConfig.port}`);
 }
 bootstrap();

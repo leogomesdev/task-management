@@ -1,5 +1,6 @@
-.vscode/
+.vscode
 .volumes
+.env
 
 # compiled output
 /dist
