@@ -69,8 +69,25 @@ docker-compose up
 #### Application container
 
 ```bash
-docker exec -it nestjs-tasks bash
+docker exec -it taskmanagement_tasks bash
 ```
+
+#### Extras
+
+##### pgAdmin - PostgreSQL Tools
+
+Optionally, to use pgAdmin:
+
+- Run:
+
+```bash
+cd extras && docker-compose up
+```
+
+- Use your _browser_ and access [http://10.12.0.4](http://10.12.0.4)
+- Login as **leogomesdev@domain.com**, password **123456**
+- "Add New Server" using .env.example credentials
+- Enjoy it!
 
 ### Without Docker
 

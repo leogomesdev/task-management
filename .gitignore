@@ -1,5 +1,6 @@
 .vscode
 .volumes
+extras/.volumes
 .env
 
 # compiled output

@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: taskmanagement_pgadmin
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=leogomesdev@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+      - PGADMIN_CONFIG_CONSOLE_LOG_LEVEL=30
+    #volumes:
+    #  - ./volumes/pgadmin:/var/lib/pgadmin/
+    networks:
+      nestjstaskmanagement_nestkjs_tasks:
+        ipv4_address: 10.12.0.4
+
+networks:
+  nestjstaskmanagement_nestkjs_tasks:
+    external: true
