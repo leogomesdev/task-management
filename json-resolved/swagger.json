@@ -16,6 +16,9 @@
   "servers" : [ {
     "url" : "https://virtserver.swaggerhub.com/leogomesdev/Task_Management/1.0.0",
     "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "http://localhost:3000",
+    "description" : "Localhost"
   } ],
   "tags" : [ {
     "name" : "task",
@@ -258,6 +261,18 @@
               }
             }
           },
+          "400" : {
+            "description" : "Bad request: validation exception",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Malformed UUID" : {
+                    "$ref" : "#/components/examples/ErrorInvalidUuid"
+                  }
+                }
+              }
+            }
+          },
           "401" : {
             "description" : "Access token is missing or invalid"
           },
@@ -296,6 +311,18 @@
         "responses" : {
           "200" : {
             "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad request: validation exception",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Malformed UUID" : {
+                    "$ref" : "#/components/examples/ErrorInvalidUuid"
+                  }
+                }
+              }
+            }
           },
           "401" : {
             "description" : "Access token is missing or invalid"
@@ -353,6 +380,9 @@
                 "examples" : {
                   "A typo in status field" : {
                     "$ref" : "#/components/examples/ErrorInvalidStatus"
+                  },
+                  "Malformed UUID" : {
+                    "$ref" : "#/components/examples/ErrorInvalidUuid"
                   }
                 }
               }
@@ -417,6 +447,9 @@
                 "examples" : {
                   "A typo in status field" : {
                     "$ref" : "#/components/examples/ErrorInvalidStatus"
+                  },
+                  "Malformed UUID" : {
+                    "$ref" : "#/components/examples/ErrorInvalidUuid"
                   }
                 }
               }
@@ -560,43 +593,50 @@
       "ErrorInvalidStatus" : {
         "value" : {
           "statusCode" : "400",
-          "message" : [ "\\\"DONEa\\\" is an invalid status. The allowed values are: OPEN,IN_PROGRESS,DONE" ],
+          "messages" : [ "\\\"DONEa\\\" is an invalid status. The allowed values are: OPEN,IN_PROGRESS,DONE" ],
           "error" : "Bad Request"
         }
       },
       "ErrorTaskNotFound" : {
         "value" : {
           "statusCode" : "404",
-          "message" : "Task with ID \\\"75f64cb1-a748-4115-9979-65dc056ce922\\\" not found",
+          "messages" : [ "Task with ID \\\"75f64cb1-a748-4115-9979-65dc056ce922\\\" not found" ],
           "error" : "Not Found"
         }
       },
       "ErrorUsernameAlreadyExists" : {
         "value" : {
           "statusCode" : "409",
-          "message" : "Username already exists",
+          "messages" : [ "Username already exists" ],
           "error" : "Conflict"
         }
       },
       "ErrorInvalidPassword" : {
         "value" : {
           "statusCode" : "400",
-          "message" : [ "password must contains: 1 upper case letter; 1 lower case letter; 1 number or special character", "password must be longer than or equal to 8 characters" ],
+          "messages" : [ "password must contains: 1 upper case letter; 1 lower case letter; 1 number or special character", "password must be longer than or equal to 8 characters" ],
           "error" : "Bad Request"
         }
       },
       "ErrorInvalidUsername" : {
         "value" : {
           "statusCode" : "400",
-          "message" : [ "username must be longer than or equal to 4 characters" ],
+          "messages" : [ "username must be longer than or equal to 4 characters" ],
           "error" : "Bad Request"
         }
       },
       "ErrorInvalidCredentials" : {
         "value" : {
           "statusCode" : "401",
-          "message" : "Invalid credentials",
+          "messages" : [ "Invalid credentials" ],
           "error" : "Unauthorized"
+        }
+      },
+      "ErrorInvalidUuid" : {
+        "value" : {
+          "statusCode" : "400",
+          "messages" : [ "Validation failed (uuid  is expected)" ],
+          "error" : "Bad Request"
         }
       }
     },
