@@ -9,7 +9,7 @@ module.exports = {
     testEnvironment: 'node',
     collectCoverageFrom: [
         '<rootDir>/**/*.ts',
-        '!<rootDir>/main.ts',
+        '!<rootDir>/*.ts',
         '!<rootDir>/**/*.entity.ts',
         '!<rootDir>/**/*.module.ts',
         '!<rootDir>/**/*.config.ts',
