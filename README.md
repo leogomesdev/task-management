@@ -5,7 +5,7 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-<p align="center">Build with <a href="http://nodejs.org" target="_blank">Node.js</a> framework</p>
+<p align="center">Build with <a href="http://nodejs.org" target="_blank">NestJS</a> framework</p>
 <p align="center">
 <a href="#" target="_blank"><img src="https://img.shields.io/badge/coverage-100%25-green" alt="Coverage" /></a>
 </p>
