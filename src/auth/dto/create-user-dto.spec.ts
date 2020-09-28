@@ -8,14 +8,6 @@ describe('CreateUserDto', () => {
     createUserDto = MockFactory.createUserDto();
   });
 
-  it('contains username property as string', () => {
-    expect(typeof createUserDto.username).toBe('string');
-  });
-
-  it('contains password property as string', () => {
-    expect(typeof createUserDto.password).toBe('string');
-  });
-
   it("when password doesn't have 1 upper case latter, throws an validation error", async () => {
     createUserDto.password = 'a1asoakmja2';
 

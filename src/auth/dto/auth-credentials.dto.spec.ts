@@ -8,14 +8,6 @@ describe('AuthCredentialsDto', () => {
     authCredentialsDto = MockFactory.authCredentialsDto();
   });
 
-  it('contains username property as string', () => {
-    expect(typeof authCredentialsDto.username).toBe('string');
-  });
-
-  it('contains password property as string', () => {
-    expect(typeof authCredentialsDto.password).toBe('string');
-  });
-
   it('when username is empty, throws an validation error', async () => {
     authCredentialsDto.username = '';
 
@@ -35,8 +27,7 @@ describe('AuthCredentialsDto', () => {
   });
 
   it('when username is not setted, throws an validation error', async () => {
-    authCredentialsDto = new AuthCredentialsDto();
-    authCredentialsDto.password = 'ABc123##';
+    delete authCredentialsDto.username;
 
     let error: ValidationError | null = null;
     const expectedError: Record<string, any> = {
@@ -72,8 +63,7 @@ describe('AuthCredentialsDto', () => {
   });
 
   it('when password is not setted, throws an validation error', async () => {
-    authCredentialsDto = new AuthCredentialsDto();
-    authCredentialsDto.username = 'user_1234';
+    delete authCredentialsDto.password;
 
     let error: ValidationError | null = null;
     const expectedError: Record<string, any> = {

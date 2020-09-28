@@ -5,6 +5,7 @@ import { Task } from '../tasks/task.entity';
 import { TaskStatus } from '../tasks/task-status.enum';
 import { CreateTaskDto } from '../tasks/dto/create-task-dto';
 import { UpdateTaskDto } from '../tasks/dto/update-task-dto';
+import { GetTasksFilterDto } from '../tasks/dto/get-tasks-filter-dto';
 import { AuthCredentialsDto } from '../auth/dto/auth-credentials.dto';
 import { CreateUserDto } from '../auth/dto/create-user-dto';
 
@@ -68,5 +69,13 @@ export default class MockFactory {
     createUserDto.password = 'ABc123##';
 
     return createUserDto;
+  }
+
+  static getTasksFilterDto(): GetTasksFilterDto {
+    const getTasksFilterDto: GetTasksFilterDto = new GetTasksFilterDto();
+    getTasksFilterDto.search = 'a';
+    getTasksFilterDto.status = TaskStatus.OPEN;
+
+    return getTasksFilterDto;
   }
 }
