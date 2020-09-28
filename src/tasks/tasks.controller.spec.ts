@@ -22,6 +22,7 @@ describe('TasksController', () => {
     getTaskById: jest.fn(),
     createTask: jest.fn(),
     updateTask: jest.fn(),
+    updateTaskStatus: jest.fn(),
     deleteTask: jest.fn(),
   });
 
@@ -210,15 +211,15 @@ describe('TasksController', () => {
   describe('updateTaskStatus', () => {
     const status: TaskStatus = TaskStatus.IN_PROGRESS;
 
-    it('calls tasksService.updateTask()', async () => {
+    it('calls tasksService.updateTaskStatus()', async () => {
       const id: string = uuidv4();
 
       await tasksController.updateTaskStatus(id, status, mockUser);
 
-      expect(tasksService.updateTask).toHaveBeenCalledTimes(1);
-      expect(tasksService.updateTask).toHaveBeenCalledWith(
+      expect(tasksService.updateTaskStatus).toHaveBeenCalledTimes(1);
+      expect(tasksService.updateTaskStatus).toHaveBeenCalledWith(
         id,
-        { status },
+        status,
         mockUser,
       );
     });
@@ -227,7 +228,7 @@ describe('TasksController', () => {
       const updatedTask: Task = MockFactory.task();
       updatedTask.status = status;
 
-      tasksService.updateTask = jest.fn().mockResolvedValue(updatedTask);
+      tasksService.updateTaskStatus = jest.fn().mockResolvedValue(updatedTask);
 
       const result: Task = await tasksController.updateTaskStatus(
         updatedTask.id,
@@ -238,12 +239,12 @@ describe('TasksController', () => {
       expect(result).toEqual(updatedTask);
     });
 
-    it('when tasksService.updateTask() throws an exception, it throws this too', async () => {
+    it('when tasksService.updateTaskStatus() throws an exception, it throws this too', async () => {
       const id: string = uuidv4();
       const exception: NotFoundException = new NotFoundException(
         `Task with ID "${id}" not found`,
       );
-      tasksService.updateTask = jest.fn().mockRejectedValue(exception);
+      tasksService.updateTaskStatus = jest.fn().mockRejectedValue(exception);
 
       await expect(
         tasksController.updateTaskStatus(id, status, mockUser),

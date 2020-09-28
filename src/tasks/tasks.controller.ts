@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Body,
   Param,
   Delete,
@@ -69,7 +70,7 @@ export class TasksController {
     return this.tasksService.createTask(createTaskDto, user);
   }
 
-  @Patch('/:id')
+  @Put('/:id')
   @UsePipes(ValidationPipe)
   updateTask(
     @Param('id', ParseUUIDPipe) id: string,
@@ -85,7 +86,7 @@ export class TasksController {
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
     @GetUser() user: User,
   ): Promise<Task> {
-    return this.tasksService.updateTask(id, { status }, user);
+    return this.tasksService.updateTaskStatus(id, status, user);
   }
 
   @Delete('/:id')

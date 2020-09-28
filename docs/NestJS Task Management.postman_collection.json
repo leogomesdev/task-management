@@ -186,7 +186,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks?search=the",
+							"raw": "{{taskManagementBaseURL}}/tasks?search=laundry",
 							"host": [
 								"{{taskManagementBaseURL}}"
 							],
@@ -196,7 +196,7 @@
 							"query": [
 								{
 									"key": "search",
-									"value": "the"
+									"value": "laundry"
 								},
 								{
 									"key": "status",
@@ -252,7 +252,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"status\": \"DONE\"\n}",
+							"raw": "{\n    \"status\": \"IN_PROGRESS\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -260,13 +260,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks/ef297a9b-cb11-404c-ab37-5dbc9fe84f79/status",
+							"raw": "{{taskManagementBaseURL}}/tasks/bfa662c3-f8ea-453b-9283-faa02f043d13/status",
 							"host": [
 								"{{taskManagementBaseURL}}"
 							],
 							"path": [
 								"tasks",
-								"ef297a9b-cb11-404c-ab37-5dbc9fe84f79",
+								"bfa662c3-f8ea-453b-9283-faa02f043d13",
 								"status"
 							]
 						}
@@ -274,7 +274,7 @@
 					"response": []
 				},
 				{
-					"name": "Update a task",
+					"name": "Update all fields of a task",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -286,7 +286,7 @@
 								}
 							]
 						},
-						"method": "PATCH",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -299,13 +299,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{taskManagementBaseURL}}/tasks/ef297a9b-cb11-404c-ab37-5dbc9fe84f79",
+							"raw": "{{taskManagementBaseURL}}/tasks/bfa662c3-f8ea-453b-9283-faa02f043d13",
 							"host": [
 								"{{taskManagementBaseURL}}"
 							],
 							"path": [
 								"tasks",
-								"ef297a9b-cb11-404c-ab37-5dbc9fe84f79"
+								"bfa662c3-f8ea-453b-9283-faa02f043d13"
 							]
 						}
 					},

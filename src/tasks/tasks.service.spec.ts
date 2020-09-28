@@ -177,6 +177,8 @@ describe('TasksService', () => {
       generatedMaps: [],
     };
     const updateTaskDto: UpdateTaskDto = {
+      title: 'A new title',
+      description: 'A new description',
       status: TaskStatus.IN_PROGRESS,
     };
 
@@ -194,13 +196,59 @@ describe('TasksService', () => {
     it('returns the updated task', async () => {
       taskRepository.update = jest.fn().mockResolvedValue(updateResultMock);
 
-      tasksService.getTaskById = jest.fn().mockResolvedValue({
-        status: TaskStatus.IN_PROGRESS,
-      });
+      tasksService.getTaskById = jest.fn().mockResolvedValue(mockTask);
 
       const result = await tasksService.updateTask(
         mockTask.id,
         updateTaskDto,
+        mockUser,
+      );
+      expect(result.id).toEqual(mockTask.id);
+    });
+
+    it("when task isn't found, throws an error", async () => {
+      updateResultMock.affected = 0;
+
+      taskRepository.update = jest.fn().mockResolvedValue(updateResultMock);
+
+      await expect(
+        tasksService.updateTask(mockTask.id, updateTaskDto, mockUser),
+      ).rejects.toThrow(
+        new NotFoundException(`Task with ID "${mockTask.id}" not found`),
+      );
+    });
+  });
+
+  describe('updateTaskStatus', () => {
+    const mockTask: Task = MockFactory.task();
+    const updateResultMock: UpdateResult = {
+      affected: 1,
+      raw: {},
+      generatedMaps: [],
+    };
+    const status: TaskStatus = TaskStatus.IN_PROGRESS;
+
+    it('calls taskRepository.update() to update a task', async () => {
+      taskRepository.update = jest.fn().mockResolvedValue(updateResultMock);
+
+      await tasksService.updateTaskStatus(mockTask.id, status, mockUser);
+
+      expect(taskRepository.update).toHaveBeenCalledWith(
+        { id: mockTask.id, userId: mockUser.id },
+        { status },
+      );
+    });
+
+    it('returns the updated task', async () => {
+      taskRepository.update = jest.fn().mockResolvedValue(updateResultMock);
+
+      tasksService.getTaskById = jest.fn().mockResolvedValue({
+        status: TaskStatus.IN_PROGRESS,
+      });
+
+      const result = await tasksService.updateTaskStatus(
+        mockTask.id,
+        status,
         mockUser,
       );
       expect(result.status).toEqual(TaskStatus.IN_PROGRESS);
@@ -212,7 +260,7 @@ describe('TasksService', () => {
       taskRepository.update = jest.fn().mockResolvedValue(updateResultMock);
 
       await expect(
-        tasksService.updateTask(mockTask.id, updateTaskDto, mockUser),
+        tasksService.updateTaskStatus(mockTask.id, status, mockUser),
       ).rejects.toThrow(
         new NotFoundException(`Task with ID "${mockTask.id}" not found`),
       );

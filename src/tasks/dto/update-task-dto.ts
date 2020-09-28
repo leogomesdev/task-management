@@ -1,20 +1,17 @@
-import { IsOptional, IsNotEmpty, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsEnum } from 'class-validator';
 import { TaskStatus } from '../task-status.enum';
 
 export class UpdateTaskDto {
-  @IsOptional()
   @IsNotEmpty()
-  title?: string;
+  title: string;
 
-  @IsOptional()
   @IsNotEmpty()
-  description?: string;
+  description: string;
 
-  @IsOptional()
   @IsEnum(TaskStatus, {
     message:
       `"$value" is an invalid status. ` +
       `The allowed values are: ${Object.keys(TaskStatus)}`,
   })
-  status?: TaskStatus;
+  status: TaskStatus;
 }
