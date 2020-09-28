@@ -11,7 +11,7 @@
       "name" : "Apache 2.0",
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version" : "1.0.3"
+    "version" : "1.0.2"
   },
   "servers" : [ {
     "url" : "https://virtserver.swaggerhub.com/leogomesdev/Task_Management/1.0.0",
