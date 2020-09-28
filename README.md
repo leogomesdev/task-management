@@ -114,7 +114,7 @@ $ npm run start:prod
 
 ## Usage
 
-Consult the API documentation [available at swagger](https://app.swaggerhub.com/apis-docs/leogomesdev/Task_Management/1.0.0) (OpenAPI 3.0)
+Consult the API documentation [available at swagger](https://app.swaggerhub.com/apis-docs/leogomesdev/Task_Management) (OpenAPI 3.0)
 
 ### TL;DR
 
