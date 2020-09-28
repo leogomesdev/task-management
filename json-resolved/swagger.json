@@ -11,7 +11,7 @@
       "name" : "Apache 2.0",
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version" : "1.0.0"
+    "version" : "1.0.3"
   },
   "servers" : [ {
     "url" : "https://virtserver.swaggerhub.com/leogomesdev/Task_Management/1.0.0",
@@ -293,60 +293,9 @@
           "bearerAuth" : [ ]
         } ]
       },
-      "delete" : {
+      "put" : {
         "tags" : [ "task" ],
-        "summary" : "Delete a task",
-        "parameters" : [ {
-          "name" : "taskId",
-          "in" : "path",
-          "description" : "Task id to delete",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string",
-            "format" : "uuid"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "400" : {
-            "description" : "Bad request: validation exception",
-            "content" : {
-              "application/json" : {
-                "examples" : {
-                  "Malformed UUID" : {
-                    "$ref" : "#/components/examples/ErrorInvalidUuid"
-                  }
-                }
-              }
-            }
-          },
-          "401" : {
-            "description" : "Access token is missing or invalid"
-          },
-          "404" : {
-            "description" : "Task not found",
-            "content" : {
-              "application/json" : {
-                "examples" : {
-                  "Not Found" : {
-                    "$ref" : "#/components/examples/ErrorTaskNotFound"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
-      },
-      "patch" : {
-        "tags" : [ "task" ],
-        "summary" : "Update some fields of a task",
+        "summary" : "Update all fields of a task",
         "parameters" : [ {
           "name" : "taskId",
           "in" : "path",
@@ -381,6 +330,57 @@
                   "A typo in status field" : {
                     "$ref" : "#/components/examples/ErrorInvalidStatus"
                   },
+                  "Malformed UUID" : {
+                    "$ref" : "#/components/examples/ErrorInvalidUuid"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid"
+          },
+          "404" : {
+            "description" : "Task not found",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Not Found" : {
+                    "$ref" : "#/components/examples/ErrorTaskNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "task" ],
+        "summary" : "Delete a task",
+        "parameters" : [ {
+          "name" : "taskId",
+          "in" : "path",
+          "description" : "Task id to delete",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad request: validation exception",
+            "content" : {
+              "application/json" : {
+                "examples" : {
                   "Malformed UUID" : {
                     "$ref" : "#/components/examples/ErrorInvalidUuid"
                   }
@@ -705,10 +705,11 @@
         }
       },
       "UpdateTask" : {
-        "description" : "Properties to update any field of a task",
+        "description" : "Properties to update all fields of a task",
         "content" : {
           "application/json" : {
             "schema" : {
+              "required" : [ "description", "status", "title" ],
               "type" : "object",
               "properties" : {
                 "title" : {
@@ -717,7 +718,7 @@
                 },
                 "description" : {
                   "type" : "string",
-                  "example" : "I need to do it as soon as possible*"
+                  "example" : "I need to do it as soon as possible"
                 },
                 "status" : {
                   "$ref" : "#/components/schemas/TaskStatusEnum"
