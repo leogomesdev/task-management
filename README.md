@@ -93,24 +93,32 @@ cd extras && docker-compose up
 
 ### Without Docker
 
-```bash
-$ cp -v .env.example .env
-```
+Be sure to install the [requirements](#requirements).
+If using [nvm](github.com/nvm-sh/nvm), you can easily run:
+  ```bash
+  $ nvm use
+  ```
 
-- Edit .env file to provide database connection configs
+- Create .env file:
+  ```bash
+  $ cp -v .env.example .env
+  ```
 
-```bash
-$ npm install
+- Edit .env file to provide database connection configs.
 
-# development
-$ npm run start
+- Install dependencies and start the application:
+  ```bash
+  $ npm install
 
-# watch mode
-$ npm run start:dev
+  # development
+  $ npm run start
 
-# production mode
-$ npm run start:prod
-```
+  # watch mode
+  $ npm run start:dev
+
+  # production mode
+  $ npm run start:prod
+  ```
 
 ## Usage
 
